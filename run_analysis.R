@@ -26,14 +26,14 @@ X <- rbind(testX,trainX)
 Y <- rbind(testY,trainY)
 subjects <- rbind(testSubjects,trainSubjects)
 
+## Extracts only the measurements on the mean and standard deviation for each measurement. 
+meanstd <- grep("mean|std",features$V2)
+X <- X[,meanstd]
+
 ## Change activity numbers to activity names
 Y <- unlist(Y)
 Y <- activities$V2[Y]
 Y <- as.data.frame(Y)
-
-## Extracts only the measurements on the mean and standard deviation for each measurement. 
-meanstd <- grep("mean|std",features$V2)
-X <- X[,meanstd]
 
 ## give every feature names 
 names(X) <- features$V2[meanstd]
@@ -50,9 +50,7 @@ dataset <- cbind(X,Y,subjects)
 
 ## creates a second, independent tidy data set with the average of each variable 
 ## for each activity and each subject
-subjectActDataset <- arrange(dataset,Subjects)
-
-subjectActDataset <- split(subjectActDataset,subjectActDataset$Subjects)
+subjectActDataset <- split(dataset,dataset$Subjects)
 
 subjectActDataset <- sapply(subjectActDataset, melt,id=c("Subjects","Activities"))
 
